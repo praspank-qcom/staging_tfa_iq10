@@ -9,6 +9,7 @@
 #include <common_def.h>
 
 #include <qti_board_def.h>
+#include <qtiseclib_defs_plat.h>
 
 /*----------------------------------------------------------------------------*/
 

@@ -108,11 +108,14 @@ BL31_SOURCES		+=	drivers/delay_timer/generic_delay_timer.c		\
 
 # chipinfo + smem: QTI_SMEM_BASE/SIZE are defined in shikra_def.h — no target-specific
 # config needed; enable as real drivers.
-# accesscontrol, smmu, cpucp: not yet configured for shikra — framework stubs.
+# accesscontrol: shikra VMIDMT and XPU3 config live in
+# drivers/qti/accesscontrol/cfg/shikra — enable as a real driver.
+# smmu, cpucp: not yet configured for shikra — framework stubs.
 # Drivers team to enable once chip-specific config is ready.
 
 include drivers/qti/smem/smem.mk
 include drivers/qti/chipinfo/chipinfo.mk
+include drivers/qti/accesscontrol/access_control.mk
 
 PLAT_INCLUDES   +=	-Iinclude/drivers/qti/sec_core/${CHIPSET}		\
 			-Iinclude/drivers/qti/accesscontrol			\
@@ -120,6 +123,5 @@ PLAT_INCLUDES   +=	-Iinclude/drivers/qti/sec_core/${CHIPSET}		\
 
 BL31_SOURCES	+=	drivers/qti/sec_core/sec_core.c				\
 			drivers/qti/sec_core/${CHIPSET}/sec_core_cfg.c		\
-			drivers/qti/accesscontrol/access_control_stub.c		\
 			drivers/qti/qtimer/qtimer_stub.c			\
 			drivers/qti/watchdog/watchdog_stub.c
