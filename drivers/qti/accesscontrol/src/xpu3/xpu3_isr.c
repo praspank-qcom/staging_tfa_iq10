@@ -47,8 +47,9 @@ static void dump_log(enum xpu xpu, int type)
 	}
 
 	for (size_t i = 0; i < g_xpu_base_addr_array_count; i++) {
-		if (g_xpu_base_addr_array[i].e_xpu != xpu)
+		if (g_xpu_base_addr_array[i].e_xpu != xpu) {
 			continue;
+		}
 
 		xpu_addr = g_xpu_base_addr_array[i].base_addr + offset;
 
@@ -115,27 +116,32 @@ void xpu_print_log(void *ctx)
 		struct xpu_err_pos_to_hal_map *row;
 
 		mask = err_bitmask[reg];
-		if (!mask)
+		if (!mask) {
 			continue;
+		}
 
 		row = xpu_err_pos_to_hal_map[reg];
 
 		for (size_t i = 0; row[i].bit_mask != 0; i++) {
 			const struct xpu_err_pos_to_hal_map *m;
 
-			if (i >= ACC_XPU_ERR_NUM_PER_REG)
+			if (i >= ACC_XPU_ERR_NUM_PER_REG) {
 				break;
+			}
 
 			m = &row[i];
 
-			if (!(m->bit_mask & mask))
+			if (!(m->bit_mask & mask)) {
 				continue;
+			}
 
-			if (m->xpu >= XPU_TYPE_COUNT)
+			if (m->xpu >= XPU_TYPE_COUNT) {
 				continue;
+			}
 
-			if (m->xpu == XPU_TYPE_NONE)
+			if (m->xpu == XPU_TYPE_NONE) {
 				continue;
+			}
 
 			dump_log(m->xpu, err_type);
 		}
@@ -172,16 +178,16 @@ int xpu_register_interrupts(void)
 {
 	int err;
 
-	err = qti_interrupt_svc_register(QTISECLIB_INT_ID_XPU_SEC, xpu_isr,
+	err = qti_interrupt_svc_register(PLAT_INT_ID_XPU_SEC, xpu_isr,
 					 &xpu_err_sec_ctx);
 	if (err) {
 		return err;
 	}
 
-	err = qti_interrupt_svc_register(QTISECLIB_INT_ID_XPU_NON_SEC, xpu_isr,
+	err = qti_interrupt_svc_register(PLAT_INT_ID_XPU_NON_SEC, xpu_isr,
 					 &xpu_err_non_sec_ctx);
 	if (err) {
-		qti_interrupt_svc_unregister(QTISECLIB_INT_ID_XPU_SEC);
+		qti_interrupt_svc_unregister(PLAT_INT_ID_XPU_SEC);
 	}
 
 	return err;

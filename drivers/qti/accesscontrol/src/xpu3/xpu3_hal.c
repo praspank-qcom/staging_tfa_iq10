@@ -39,15 +39,17 @@ void xpu3_hal_enable_domain(struct xpu_instance *xpu)
 	uint32_t rev;
 
 	/* Already initialized from this context */
-	if ((xpu->flag & XPU_INITIALIZED) != 0U)
+	if ((xpu->flag & XPU_INITIALIZED) != 0U) {
 		return;
+	}
 
 	xpu->flag |= XPU_INITIALIZED;
 
 	/* If GCR0 is already programmed */
 	gcr0_val = mmio_read_32(xpu->xpu_base_addr + XPU3_GCR0_OFFSET);
-	if (gcr0_val != 0U)
+	if (gcr0_val != 0U) {
 		return;
+	}
 
 	/* HW revision check: enable log-mode disable on newer revisions */
 	rev = mmio_read_32(xpu->xpu_base_addr + XPU3_REV_OFFSET);
@@ -97,20 +99,24 @@ void xpu3_hal_set_mpu_permissions(struct xpu_instance *xpu, uint32_t rg_num)
 	bool no_perms;
 	uint32_t tmp;
 
-	if (xpu3_hal_get_xpu_type(xpu) != XPU_TYPE_MPU)
+	if (xpu3_hal_get_xpu_type(xpu) != XPU_TYPE_MPU) {
 		return;
+	}
 
 	for (int i = 0; i < xpu->part_range_arr_size; i++, range++, owner++) {
-		if (rg_num != XPU_RG_ALL && range->rg_num != rg_num)
+		if (rg_num != XPU_RG_ALL && range->rg_num != rg_num) {
 			continue;
+		}
 
-		if (i >= xpu->owner_arr_size)
+		if (i >= xpu->owner_arr_size) {
 			goto out;
+		}
 
 		no_perms = (owner->perm_r == 0 && owner->perm_w == 0);
 
-		if (owner->rg_num == XPU_UMR_RG || no_perms)
+		if (owner->rg_num == XPU_UMR_RG || no_perms) {
 			continue;
+		}
 
 		cr1 = base + XPU3_RGN_CR1_OFFSET(range->rg_num);
 		cr3 = base + XPU3_RGN_CR3_OFFSET(range->rg_num);
@@ -121,11 +127,13 @@ void xpu3_hal_set_mpu_permissions(struct xpu_instance *xpu, uint32_t rg_num)
 		mmio_write_32(cr1, owner->perm_r);
 		mmio_write_32(cr3, owner->perm_w);
 
-		if (owner->perm_r & APPS_S_DOMAIN)
+		if (owner->perm_r & APPS_S_DOMAIN) {
 			mmio_write_32(cr0, 1);
+		}
 
-		if (owner->perm_w & APPS_S_DOMAIN)
+		if (owner->perm_w & APPS_S_DOMAIN) {
 			mmio_write_32(cr2, 1);
+		}
 
 		if (vmid_supported(xpu)) {
 			/* RACR */
@@ -154,11 +162,13 @@ void xpu3_hal_set_mpu_permissions(struct xpu_instance *xpu, uint32_t rg_num)
 		mmio_write_32(cr1, owner->perm_r);
 		mmio_write_32(cr3, owner->perm_w);
 
-		if (owner->perm_r & APPS_S_DOMAIN)
+		if (owner->perm_r & APPS_S_DOMAIN) {
 			mmio_write_32(cr0, 1);
+		}
 
-		if (owner->perm_w & APPS_S_DOMAIN)
+		if (owner->perm_w & APPS_S_DOMAIN) {
 			mmio_write_32(cr2, 1);
+		}
 
 		if (vmid_supported(xpu)) {
 			/* RACR */
@@ -189,17 +199,20 @@ void xpu3_hal_set_apu_permissions(struct xpu_instance *xpu, uint32_t rg_num)
 	uint32_t tmp;
 	uint8_t type = xpu3_hal_get_xpu_type(xpu);
 
-	if (type != XPU_TYPE_APU && type != XPU_TYPE_RPU)
+	if (type != XPU_TYPE_APU && type != XPU_TYPE_RPU) {
 		return;
+	}
 
 	for (size_t i = 0; i < xpu->owner_arr_size; i++, owner++) {
-		if (rg_num != XPU_RG_ALL && owner->rg_num != rg_num)
+		if (rg_num != XPU_RG_ALL && owner->rg_num != rg_num) {
 			continue;
+		}
 
 		no_perms = (owner->perm_r == 0 && owner->perm_w == 0);
 
-		if (owner->rg_num == XPU_UMR_RG || no_perms)
+		if (owner->rg_num == XPU_UMR_RG || no_perms) {
 			continue;
+		}
 
 		cr1 = base + XPU3_RGN_CR1_OFFSET(owner->rg_num);
 		cr3 = base + XPU3_RGN_CR3_OFFSET(owner->rg_num);
@@ -210,11 +223,13 @@ void xpu3_hal_set_apu_permissions(struct xpu_instance *xpu, uint32_t rg_num)
 		mmio_write_32(cr1, owner->perm_r);
 		mmio_write_32(cr3, owner->perm_w);
 
-		if (owner->perm_r & APPS_S_DOMAIN)
+		if (owner->perm_r & APPS_S_DOMAIN) {
 			mmio_write_32(cr0, 1);
+		}
 
-		if (owner->perm_w & APPS_S_DOMAIN)
+		if (owner->perm_w & APPS_S_DOMAIN) {
 			mmio_write_32(cr2, 1);
+		}
 
 		if (vmid_supported(xpu)) {
 			/* RACR */
@@ -245,12 +260,14 @@ void xpu3_hal_set_mpu_dynamic_permissions(struct xpu_instance *xpu,
 	uintptr_t cr1, cr3;
 	uint32_t tmp;
 
-	if (xpu3_hal_get_xpu_type(xpu) != XPU_TYPE_MPU)
+	if (xpu3_hal_get_xpu_type(xpu) != XPU_TYPE_MPU) {
 		return;
+	}
 
 	for (size_t i = 0; i < xpu->part_range_arr_size; i++, range++) {
-		if (rg_num != XPU_RG_ALL && range->rg_num != rg_num)
+		if (rg_num != XPU_RG_ALL && range->rg_num != rg_num) {
 			continue;
+		}
 
 		cr1 = base + XPU3_RGN_CR1_OFFSET(range->rg_num);
 		cr3 = base + XPU3_RGN_CR3_OFFSET(range->rg_num);
@@ -258,8 +275,9 @@ void xpu3_hal_set_mpu_dynamic_permissions(struct xpu_instance *xpu,
 		mmio_write_32(cr1, perm_r);
 		mmio_write_32(cr3, perm_w);
 
-		if (!vmid_supported(xpu))
+		if (!vmid_supported(xpu)) {
 			continue;
+		}
 
 		racr = base + XPU3_RGN_RACR_OFFSET(range->rg_num);
 		tmp = perm_r & APPS_NS_DOMAIN ? DEFAULT_VMID_0 : 0;
@@ -277,12 +295,14 @@ void xpu3_hal_program_mpu_partitions(struct xpu_instance *xpu, uint32_t rg_num)
 	uint32_t start_lo, start_hi, end_lo, end_hi;
 	uintptr_t start_0, start_1, end_0, end_1;
 
-	if (xpu3_hal_get_xpu_type(xpu) != XPU_TYPE_MPU)
+	if (xpu3_hal_get_xpu_type(xpu) != XPU_TYPE_MPU) {
 		return;
+	}
 
 	for (size_t i = 0; i < xpu->part_range_arr_size; i++, range++) {
-		if (rg_num != XPU_RG_ALL && range->rg_num != rg_num)
+		if (rg_num != XPU_RG_ALL && range->rg_num != rg_num) {
 			continue;
+		}
 
 		start_lo = (uint32_t)range->start_addr;
 		start_hi = (uint32_t)(range->start_addr >> 32);
@@ -325,8 +345,9 @@ void xpu3_hal_set_region_ownership(struct xpu_instance *xpu, uint32_t rg_num)
 		}
 
 		/* Apply to ALL or specific region */
-		if (rg_num != XPU_RG_ALL && owner->rg_num != rg_num)
+		if (rg_num != XPU_RG_ALL && owner->rg_num != rg_num) {
 			continue;
+		}
 
 		gcr0 = base + XPU3_RGN_GCR0_OFFSET(owner->rg_num);
 

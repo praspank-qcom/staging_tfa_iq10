@@ -37,7 +37,10 @@ void xpu3_hal_enable_domain(struct xpu_instance *xpu);
 /* Program the address range of each matching resource group. MPU only. */
 void xpu3_hal_program_mpu_partitions(struct xpu_instance *xpu, uint32_t rg_num);
 
-/* Assign each matching resource group, and the unmapped region, to its owner. */
+/*
+ * Assign each matching resource group, and the unmapped region, to its
+ * owner.
+ */
 void xpu3_hal_set_region_ownership(struct xpu_instance *xpu, uint32_t rg_num);
 
 /*
@@ -53,8 +56,8 @@ void xpu3_hal_set_mpu_permissions(struct xpu_instance *xpu, uint32_t rg_num);
 void xpu3_hal_set_apu_permissions(struct xpu_instance *xpu, uint32_t rg_num);
 
 /*
- * Apply permissions supplied at runtime rather than from the tables, used when a
- * region is assigned or released. MPU only.
+ * Apply permissions supplied at runtime rather than from the tables, used
+ * when a region is assigned or released. MPU only.
  */
 void xpu3_hal_set_mpu_dynamic_permissions(struct xpu_instance *xpu,
 					  uint32_t rg_num, uint32_t perm_r,

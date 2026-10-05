@@ -85,7 +85,8 @@ CASSERT(sizeof(struct vmidmt_err_pos_to_hal_map) == 2,
 
 CASSERT(sizeof(struct vmidmt_map) == 28, assert_vmidmt_map_size);
 CASSERT(offsetof(struct vmidmt_map, sid_list) == 0, assert_vmidmt_map_sid_list);
-CASSERT(offsetof(struct vmidmt_map, num_sids) == 20, assert_vmidmt_map_num_sids);
+CASSERT(offsetof(struct vmidmt_map, num_sids) == 20,
+	assert_vmidmt_map_num_sids);
 CASSERT(offsetof(struct vmidmt_map, index) == 21, assert_vmidmt_map_index);
 CASSERT(offsetof(struct vmidmt_map, vmid) == 22, assert_vmidmt_map_vmid);
 CASSERT(offsetof(struct vmidmt_map, flags) == 23, assert_vmidmt_map_flags);

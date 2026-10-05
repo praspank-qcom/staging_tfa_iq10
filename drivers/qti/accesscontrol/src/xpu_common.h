@@ -63,16 +63,6 @@ struct xpu_err_pos_to_hal_map {
 };
 
 /*
- * Prepare the configuration source, before anything reads a configuration
- * structure from it. Returns 0 on success.
- *
- * XPU3 has nothing to do: its tables are compiled in. XPU4 parses and validates
- * the access-control config image here, which both the XPU and the VMIDMT
- * driver then read from, so this must run before either is configured.
- */
-int acc_cfg_init(void);
-
-/*
  * Report whether this execution environment may write the given address under
  * the XPU protection policy. Returns 0 on success, with *can_write set.
  *

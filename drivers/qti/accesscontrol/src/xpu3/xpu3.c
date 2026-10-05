@@ -18,9 +18,9 @@
  * XPU3 driver.
  *
  * Decides which instances and resource groups to program from the compile-time
- * tables under cfg/${CHIPSET}, and implements the revision-agnostic interface in
- * xpu_common.h. All register access is delegated to xpu3_hal.c, and violation
- * handling lives in xpu3_isr.c.
+ * tables under cfg/${CHIPSET}, and implements the revision-agnostic interface
+ * in xpu_common.h. All register access is delegated to xpu3_hal.c, and
+ * violation handling lives in xpu3_isr.c.
  */
 
 /* Address stored in a resource group that is free for dynamic assignment. */
@@ -31,8 +31,9 @@ static void xpu_lock_down_assets(void)
 	struct xpu_instance *xpus = msm_xpu_cfg;
 
 	for (size_t i = 0; i < msm_xpu_cfg_count; i++, xpus++) {
-		if (!(xpus->flag & XPU_PROTECTION_STATIC))
+		if (!(xpus->flag & XPU_PROTECTION_STATIC)) {
 			continue;
+		}
 
 		xpu3_hal_enable_domain(xpus);
 
@@ -51,12 +52,14 @@ static int xpu_lock_down_assets_dynamic(struct xpu_instance *xpus,
 	uint32_t i;
 
 	for (i = 0; i < xpu_count; i++, xpus++) {
-		if (xpus->xpu_id == xpu_id)
+		if (xpus->xpu_id == xpu_id) {
 			break;
+		}
 	}
 
-	if (i >= xpu_count)
+	if (i >= xpu_count) {
 		return -1;
+	}
 
 	xpu3_hal_enable_domain(xpus);
 
@@ -108,8 +111,9 @@ static void xpu_init_mpu_instances(struct mpu_ranges *range)
 	for (uint32_t i = 0; i < range->mpus_count; i++) {
 		struct xpu_instance *mpu = &range->mpus[i];
 
-		if (xpu3_hal_get_xpu_type(mpu) != XPU_TYPE_MPU)
+		if (xpu3_hal_get_xpu_type(mpu) != XPU_TYPE_MPU) {
 			continue;
+		}
 
 		uint32_t dev_cnt = range->device_prtn_cnt;
 
@@ -141,15 +145,6 @@ int xpu_can_write(uintptr_t addr, bool *can_write)
 	(void)addr;
 	*can_write = true;
 
-	return 0;
-}
-
-int acc_cfg_init(void)
-{
-	/*
-	 * XPU3 configuration is compiled in under cfg/${CHIPSET}, so there is no
-	 * configuration source to bring up.
-	 */
 	return 0;
 }
 

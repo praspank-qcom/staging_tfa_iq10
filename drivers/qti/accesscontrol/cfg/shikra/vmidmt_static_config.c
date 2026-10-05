@@ -12,7 +12,7 @@
 #include <vmidmt_internal.h>
 #include <vmidmt_target_hwio.h>
 
-#include <qtiseclib_defs_plat.h>
+#include <shikra_def.h>
 
 /*
  * VMIDMT instance base addresses (SCR0). Derived from the Shikra HWIO bases:
@@ -171,26 +171,26 @@ static const struct vmidmt_intr_reg g_vmidmt_intr_reg[VMIDMT_INTR_COUNT] = {
 		.status_addr = HWIO_TCSR_SS_VMIDMT_CLIENT_SEC_INTR_ADDR,
 		.status_mask = HWIO_TCSR_SS_VMIDMT_CLIENT_SEC_INTR_RMSK,
 		.enable_addr = HWIO_TCSR_SS_VMIDMT_CLIENT_SEC_INTR_ENABLE_ADDR,
-		.intr_num = QTISECLIB_INT_ID_VMIDMT_ERR_CLT_SEC,
+		.intr_num = PLAT_INT_ID_VMIDMT_ERR_CLT_SEC,
 	},
 	[VMIDMT_INTR_CLT_NONSEC] = {
 		.status_addr = HWIO_TCSR_SS_VMIDMT_CLIENT_NON_SEC_INTR_ADDR,
 		.status_mask = HWIO_TCSR_SS_VMIDMT_CLIENT_NON_SEC_INTR_RMSK,
 		.enable_addr =
 			HWIO_TCSR_SS_VMIDMT_CLIENT_NON_SEC_INTR_ENABLE_ADDR,
-		.intr_num = QTISECLIB_INT_ID_VMIDMT_ERR_CLT_NONSEC,
+		.intr_num = PLAT_INT_ID_VMIDMT_ERR_CLT_NONSEC,
 	},
 	[VMIDMT_INTR_CFG_SEC] = {
 		.status_addr = HWIO_TCSR_SS_VMIDMT_CFG_SEC_INTR_ADDR,
 		.status_mask = HWIO_TCSR_SS_VMIDMT_CFG_SEC_INTR_RMSK,
 		.enable_addr = HWIO_TCSR_SS_VMIDMT_CFG_SEC_INTR_ENABLE_ADDR,
-		.intr_num = QTISECLIB_INT_ID_VMIDMT_ERR_CFG_SEC,
+		.intr_num = PLAT_INT_ID_VMIDMT_ERR_CFG_SEC,
 	},
 	[VMIDMT_INTR_CFG_NONSEC] = {
 		.status_addr = HWIO_TCSR_SS_VMIDMT_CFG_NON_SEC_INTR_ADDR,
 		.status_mask = HWIO_TCSR_SS_VMIDMT_CFG_NON_SEC_INTR_RMSK,
 		.enable_addr = HWIO_TCSR_SS_VMIDMT_CFG_NON_SEC_INTR_ENABLE_ADDR,
-		.intr_num = QTISECLIB_INT_ID_VMIDMT_ERR_CFG_NONSEC,
+		.intr_num = PLAT_INT_ID_VMIDMT_ERR_CFG_NONSEC,
 	},
 };
 

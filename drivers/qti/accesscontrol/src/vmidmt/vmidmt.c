@@ -37,68 +37,11 @@ struct vmidmt_err_ctx {
 };
 
 static struct vmidmt_err_ctx vmidmt_err[VMIDMT_INTR_COUNT] = {
-	[VMIDMT_INTR_CLT_SEC] = { .id = VMIDMT_INTR_CLT_SEC, .reg = 0 },
+	[VMIDMT_INTR_CLT_SEC]    = { .id = VMIDMT_INTR_CLT_SEC,    .reg = 0 },
 	[VMIDMT_INTR_CLT_NONSEC] = { .id = VMIDMT_INTR_CLT_NONSEC, .reg = 0 },
-	[VMIDMT_INTR_CFG_SEC] = { .id = VMIDMT_INTR_CFG_SEC, .reg = 0 },
+	[VMIDMT_INTR_CFG_SEC]    = { .id = VMIDMT_INTR_CFG_SEC,    .reg = 0 },
 	[VMIDMT_INTR_CFG_NONSEC] = { .id = VMIDMT_INTR_CFG_NONSEC, .reg = 0 },
 };
-
-/*
- * VMIDMT error interrupt registers.
- *
- * TODO: provisional. These are SoC addresses and belong in the platform port;
- * they live here for now so XPU4 targets, which have no cfg/${CHIPSET}
- * directory, still resolve them. The values mirror the downstream driver:
- * TCSR_SS_VMIDMT_{CLIENT,CFG}_{SEC,NON_SEC}_INTR status and enable registers,
- * at TCSR_TCSR_REGS_REG_BASE = QTI_CORE_TOP_CSR_BASE + 0xc0000.
- */
-#define VMIDMT_TCSR_REGS_BASE		UL(0x01fc0000)
-#define VMIDMT_TCSR_INTR_RMSK		0x0003ffffU
-
-#define VMIDMT_TCSR_CLT_NONSEC_STATUS	(VMIDMT_TCSR_REGS_BASE + 0x2010U)
-#define VMIDMT_TCSR_CLT_NONSEC_ENABLE	(VMIDMT_TCSR_REGS_BASE + 0x2050U)
-#define VMIDMT_TCSR_CFG_NONSEC_STATUS	(VMIDMT_TCSR_REGS_BASE + 0x3000U)
-#define VMIDMT_TCSR_CFG_NONSEC_ENABLE	(VMIDMT_TCSR_REGS_BASE + 0x3040U)
-#define VMIDMT_TCSR_CLT_SEC_STATUS	(VMIDMT_TCSR_REGS_BASE + 0x4010U)
-#define VMIDMT_TCSR_CLT_SEC_ENABLE	(VMIDMT_TCSR_REGS_BASE + 0x4050U)
-#define VMIDMT_TCSR_CFG_SEC_STATUS	(VMIDMT_TCSR_REGS_BASE + 0x5000U)
-#define VMIDMT_TCSR_CFG_SEC_ENABLE	(VMIDMT_TCSR_REGS_BASE + 0x5040U)
-
-static const struct vmidmt_intr_addr vmidmt_intr_addrs[VMIDMT_INTR_COUNT] = {
-	[VMIDMT_INTR_CLT_SEC] = {
-		.status_addr = VMIDMT_TCSR_CLT_SEC_STATUS,
-		.status_mask = VMIDMT_TCSR_INTR_RMSK,
-		.enable_addr = VMIDMT_TCSR_CLT_SEC_ENABLE,
-	},
-	[VMIDMT_INTR_CLT_NONSEC] = {
-		.status_addr = VMIDMT_TCSR_CLT_NONSEC_STATUS,
-		.status_mask = VMIDMT_TCSR_INTR_RMSK,
-		.enable_addr = VMIDMT_TCSR_CLT_NONSEC_ENABLE,
-	},
-	[VMIDMT_INTR_CFG_SEC] = {
-		.status_addr = VMIDMT_TCSR_CFG_SEC_STATUS,
-		.status_mask = VMIDMT_TCSR_INTR_RMSK,
-		.enable_addr = VMIDMT_TCSR_CFG_SEC_ENABLE,
-	},
-	[VMIDMT_INTR_CFG_NONSEC] = {
-		.status_addr = VMIDMT_TCSR_CFG_NONSEC_STATUS,
-		.status_mask = VMIDMT_TCSR_INTR_RMSK,
-		.enable_addr = VMIDMT_TCSR_CFG_NONSEC_ENABLE,
-	},
-};
-
-int plat_qti_vmidmt_get_intr_regs(const struct vmidmt_intr_addr **regs,
-				  uint32_t *count)
-{
-	if (regs == NULL || count == NULL) {
-		return -1;
-	}
-
-	*regs = vmidmt_intr_addrs;
-	*count = VMIDMT_INTR_COUNT;
-
-	return 0;
-}
 
 static struct hal_vmidmt_info *get_info_cfg(uint8_t port)
 {

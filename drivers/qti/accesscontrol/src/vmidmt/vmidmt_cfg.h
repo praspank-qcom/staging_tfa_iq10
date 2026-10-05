@@ -45,26 +45,6 @@ struct vmidmt_intr_reg {
 	uint32_t intr_num;
 };
 
-/*
- * Status and enable register addresses for one VMIDMT error interrupt.
- *
- * These are SoC register addresses rather than access-control policy, so they
- * come from the platform and not from the config image — the image describes no
- * VMIDMT interrupt registers, only RA XPU ones.
- */
-struct vmidmt_intr_addr {
-	uint32_t status_addr;
-	uint32_t status_mask;
-	uint32_t enable_addr;
-};
-
-/*
- * Return the VMIDMT interrupt register addresses, as an array indexed by
- * enum vmidmt_intr_id. Implemented by the platform. Returns 0 on success.
- */
-int plat_qti_vmidmt_get_intr_regs(const struct vmidmt_intr_addr **regs,
-				  uint32_t *count);
-
 /* Per-instance base addresses and probed parameters, indexed by instance id. */
 int vmidmt_cfg_get_info_array(struct hal_vmidmt_info **info, uint32_t *count);
 
